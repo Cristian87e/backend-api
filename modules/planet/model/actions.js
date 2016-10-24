@@ -18,27 +18,31 @@ const findByName = (name, cb) => {
 }
 
 const findById = (id, cb) => {
-  Model.find({ id: id }, cb)
+  Model.find({ _id: id }, cb)
   // schema.statics.findById = (id, cb) => {
   //   return this.find({ id: id }, cb)
   // }
 }
 
 const create = (data, cb) => {
+  // TODO: review return only contract + id
   const model = new Model(contract.normalize(data))
 
   return new Promise((resolve, reject) => {
     model.save((err) => {
-      // TODO: Return with ID created
       if (!_.isEmpty(err)) {
         reject(err)
       }
-      console.log("ACTION")
-      console.log(contract.normalize(model))
+
       resolve(model)
 
     })
   })
+}
+
+const deleteById = (id, cb) => {
+  // TODO: return err but id did not find.
+  Model.remove({ _id: id }, cb)
 }
 
 // schema.statics.create = (items, cb) => {
@@ -57,5 +61,6 @@ module.exports = {
   find: find,
   findByName: findByName,
   findById: findById,
-  create: create
+  create: create,
+  deleteById: deleteById,
 }

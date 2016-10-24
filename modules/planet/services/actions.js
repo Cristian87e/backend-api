@@ -6,7 +6,7 @@ const modelContract = require('../model/contract')
 
 const fetch = (req, res) => {
   console.log('fetched')
-  const id = req.params.name
+  const name = req.params.name
 
   modelActions.find((err, data) => {
     if (err) {
@@ -28,12 +28,24 @@ const create = (req, res) => {
   }
 
   modelActions.create(data).then((model) => {
-    console.log(modelContract.normalize(model))
     res.status(200).jsonp(modelContract.normalize(model))
+  })
+}
+
+const remove = () => {
+  const id = req.params.id
+
+  modelActions.deleteById(id).then((err, data) => {
+    if (err) {
+      return err
+    }
+
+    res.status(200).jsonp(data)
   })
 }
 
 module.exports = {
   fetch: fetch,
   create: create,
+  remove: remove,
 }
