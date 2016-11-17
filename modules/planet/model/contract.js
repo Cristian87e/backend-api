@@ -29,13 +29,11 @@ const normalize = (obj) => {
   const defaults = getDefaults()
   let keys = _.keys(defaults)
 
-  if (_.has(obj, '_id')) {
+  if (_.hasIn(obj, '_id')) {
     keys = _.concat(keys, ['_id'])
   }
 
-  const cleanObj = _.pickBy(obj, keys)
-
-  return _.assign(defaults, cleanObj)
+  return _.assign(defaults, _.pick(obj, keys))
 }
 
 module.exports = {

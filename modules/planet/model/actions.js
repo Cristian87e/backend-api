@@ -3,25 +3,34 @@ const schema = require('./schema')
 const Model = require('./model')
 const contract = require('./contract')
 
-const find = (cb) => {
-  Model.find({}, cb)
-  // schema.statics.findById = (id, cb) => {
-  //   return this.find({ id: id }, cb)
-  // }
+const find = () => {
+  return new Promise((resolve, reject) => {
+    Model.find({name: 'Planet One'}, (err, data) => {
+      if (!_.isEmpty(err)) {
+        reject(err)
+      }
+      var data = _.map(data, contract.normalize)
+      resolve(data)
+    })
+  })
 }
 
 const findByName = (name, cb) => {
   Model.find({ name: name }, cb)
-  // schema.statics.findById = (id, cb) => {
-  //   return this.find({ id: id }, cb)
-  // }
 }
 
 const findById = (id, cb) => {
-  Model.find({ _id: id }, cb)
-  // schema.statics.findById = (id, cb) => {
-  //   return this.find({ id: id }, cb)
-  // }
+  Model.find({ _id: id })
+
+  return new Promise((resolve, reject) => {
+    Model.save((err) => {
+      if (!_.isEmpty(err)) {
+        reject(err)
+      }
+
+      resolve(model)
+    })
+  })
 }
 
 const create = (data, cb) => {
@@ -29,7 +38,7 @@ const create = (data, cb) => {
   const model = new Model(contract.normalize(data))
 
   return new Promise((resolve, reject) => {
-    model.save((err) => {
+    Model.save((err) => {
       if (!_.isEmpty(err)) {
         reject(err)
       }
